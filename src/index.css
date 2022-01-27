@@ -1,0 +1,53 @@
+h1 {
+  color: green;
+  font-style: italic;
+}
+
+.note {
+  color: grey;
+  padding-top: 3px;
+  font-size: 15px;
+}
+
+.error {
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.label { 
+  display: inline-block;
+  width: 80px; 
+}
+
+.formline {
+  margin-bottom: 10px;
+}
+
+.form {
+  padding: 0 10px 20px 10px;
+}
+
+.blog {
+  background: #f2f2f2;
+  padding: 5px 10px;
+  margin-bottom: 6px;
+}
+
+.blog h3 {
+  margin: 0;
+}
