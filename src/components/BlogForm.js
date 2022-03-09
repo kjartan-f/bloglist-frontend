@@ -1,43 +1,55 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setBlog } from '../reducer/blogReducer'
+import { createNotification, removeNotification } from '../reducer/notificationReducer'
+import { useNavigate } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 
-
-const BlogForm = ({ author, createBlog } ) => {
+const BlogForm = ({ user } ) => {
+  if (!user) {
+    return null
+  }
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
 
   const addBlog = (e) => {
     e.preventDefault()
-    createBlog({
+    const newBlog = {
       title: title,
       url : url,
-      author: author
-    })
+      author: user.name
+    }
+
+    dispatch(setBlog(newBlog))
+    dispatch(createNotification({ notification: `New blog "${newBlog.title}" by ${user.name}`, type: 'success' }))
+    setTimeout(() => {
+      dispatch(removeNotification())
+    }, 5000)
 
     setTitle('')
     setUrl('')
+    navigate('/')
   }
-
-
 
   return (
     <>
       <h2>New blog</h2>
-      <form className="form" onSubmit={addBlog}>
-        <div className="formline">
-          <label className="label">Title</label>
-          <input id="title" value={title} onChange={({ target }) => setTitle(target.value)} />
-        </div>
-        <div className="formline">
-          <label className="label">Author</label>
-          <input id="author" value={author} readOnly/>
-        </div>
-        <div className="formline">
-          <label className="label">Url</label>
-          <input id="url" value={url} onChange={({ target }) => setUrl(target.value)}/>
-        </div>
-        <button id="submit-new-blog" type="Submit">Submit</button>
-      </form>
+      <Form className="form" onSubmit={addBlog}>
+        <Form.Group>
+          <Form.Label>Title</Form.Label>
+          <Form.Control id="title" value={title} onChange={({ target }) => setTitle(target.value)} />
+          <Form.Label>Author</Form.Label>
+          <Form.Control id="author" value={user.name} readOnly/>
+          <Form.Label>Url</Form.Label>
+          <Form.Control id="url" value={url} onChange={({ target }) => setUrl(target.value)}/>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form.Group>
+      </Form>
     </>
   )
 }

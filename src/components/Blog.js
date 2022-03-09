@@ -1,45 +1,48 @@
-import React, { useState } from 'react'
-import ToggleButton from './ToggleButton'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { likeBlog, deleteBlog } from '../reducer/blogReducer'
+import { useParams } from 'react-router-dom'
+import Comments from './Comments'
+import { Button } from 'react-bootstrap'
 
 
-const Blog = ({ blog, user, updateBlog, removeBlog }) => {
-  const [show, setShow] = useState(false)
+
+const Blog = ({ user }) => {
+  const dispatch = useDispatch()
+  const id = useParams().id
+  const blog = useSelector(state => state.blogs.find(blog => blog.id === id))
+  if (!blog) {
+    return null
+  }
+
 
   let userId = null
   if (user !== null) {
     userId = user.id
   }
-
-  const toggleShow = () => {
-    setShow(!show)
-  }
+  console.log(userId, blog.user.id)
 
   const like = () => {
-    const likeBlog = { ...blog, likes: blog.likes +1, user: blog.user.id }
-    updateBlog(likeBlog)
+    const likedBlog = { ...blog, likes: blog.likes +1, user: blog.user.id }
+    dispatch(likeBlog(likedBlog))
   }
 
   const confirmDel = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      removeBlog(blog.id)
+      dispatch(deleteBlog(blog.id))
     }
-  }
-
-  const blogDetails = () => {
-    return (
-      <div>
-        <div><a href={blog.url}>{blog.url}</a></div>
-        <div>Likes {blog.likes} <button onClick={like}>like</button></div>
-        <div>{blog.author}</div>
-        {userId === blog.user.id && <button onClick={confirmDel}>Remove</button>}
-      </div>
-    )
   }
 
   return (
     <div className="blog">
-      <h3>{blog.title} <ToggleButton toggle={toggleShow} state={show} /> </h3>
-      {show && blogDetails()}
+      <h3>{blog.title} </h3>
+      <div>
+        <div><a href={blog.url}>{blog.url}</a></div>
+        <div>Likes: {blog.likes} <Button onClick={like}>like</Button></div>
+        <div>Author: {blog.author}</div>
+        {userId === blog.user.id && <Button variant="secondary" onClick={confirmDel}>Remove</Button>}
+      </div>
+      <Comments id={id} />
     </div>
   )
 }

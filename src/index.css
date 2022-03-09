@@ -51,3 +51,11 @@ h1 {
 .blog h3 {
   margin: 0;
 }
+
+.nav {
+  display: flex;
+}
+
+.nav > * {
+  padding: 0 10px;
+}

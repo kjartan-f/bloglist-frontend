@@ -1,15 +1,16 @@
 import React from 'react'
+import { Alert } from 'react-bootstrap'
 
-const Notification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
+
+const Notification = ({ messages }) => {
 
   return (
-    <div className={message.type}>
-      {message.msg}
+    <div className="container">
+      { messages.map((n) => <Alert variant={n.type}  key={n.id} >{n.notification}</Alert>) }
     </div>
   )
+
 }
 
 export default Notification
+
